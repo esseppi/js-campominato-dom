@@ -15,12 +15,15 @@ function selectLev() {
     cancel();
     if (levelInp.value == 'firstLevel') {
         generazione(levels[0]);
+        return 1
     } else if (levelInp.value == 'secondLevel') {
         generazione(levels[1]);
+        return 2
     } else  if (levelInp.value == 'thirdLevel') {
         generazione(levels[2]);
     } else {
         alert('Seleziona un livello')
+        return 3
     }
 };
 // reset
@@ -38,27 +41,40 @@ function generazione (level) {
         box.classList.add(`box-${i}`)
         box.style.border = '1px solid black'
         box.style.width = dim + '%'
+        // canalizzatore del click specifico 'box' collegato alla funzione changecolor
         box.addEventListener('click',changeColor)
         box.innerHTML = i;
         campo.append(box)
     }
 };
 let looserNumbers = []
+console.log(looserNumbers)
+// creazione numeri perdenti random
+while (looserNumbers.length < 16) { 
+    let random = Math.floor(Math.random() * 100) + 1;
+    if (!(looserNumbers.includes(random))) {
+        looserNumbers.push(random);
+    }
+};
+// effetto che ha il click sulla casella
+let bombCounter = 0
 function changeColor() {
     for (let i = 0; i < looserNumbers.length; i++) {
         const element = looserNumbers[i];
         if ((this.innerHTML + '' == element + '')) {
-            this.classList.add('bg-danger')
-            this.classList.remove('bg-light')
+            bombCounter =+ 1;
+            this.classList.add('bg-danger');
+            this.classList.remove('bg-light');
         } else {
-            this.classList.add('bg-secondary')
-            this.classList.remove('bg-light')
-        }   
+            this.classList.add('bg-secondary');
+            this.classList.remove('bg-light');
+        }           
+    }
+    if (bombCounter == 16) {
+        campo.innerHTML = 'Hai perso'  
     }
 };
-while (looserNumbers.length < 16) { 
-let random = Math.floor(Math.random() * 100) + 1;
-if (!(looserNumbers.includes(random))) {
-    looserNumbers.push(random);
-}};
+
+
+
 
