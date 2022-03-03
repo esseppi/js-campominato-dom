@@ -43,21 +43,22 @@ function generazione (level) {
         campo.append(box)
     }
 };
-// numeri perdenti
 let looserNumbers = []
-while (looserNumbers.length < 16) { 
-    let random = Math.floor(Math.random() * 100) + 1;
-    if (!(looserNumbers.includes(random))) {
-        looserNumbers.push(random);
+function changeColor() {
+    for (let i = 0; i < looserNumbers.length; i++) {
+        const element = looserNumbers[i];
+        if ((this.innerHTML + '' == element + '')) {
+            this.classList.add('bg-danger')
+            this.classList.remove('bg-light')
+        } else {
+            this.classList.add('bg-secondary')
+            this.classList.remove('bg-light')
+        }   
     }
 };
-console.log(looserNumbers)
-
-
-let content = document.querySelectorAll('.box')
-
-function changeColor() {
-    this.classList.add('bg-secondary')
-    this.classList.remove('bg-light')
-}
+while (looserNumbers.length < 16) { 
+let random = Math.floor(Math.random() * 100) + 1;
+if (!(looserNumbers.includes(random))) {
+    looserNumbers.push(random);
+}};
 
