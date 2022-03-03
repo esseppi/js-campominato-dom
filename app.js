@@ -7,7 +7,7 @@ campo.style.maxWidth = '500px'
 let play = document.querySelector('.play')
 let replay = document.querySelector('.replay')
 // levels
-let levels = [49, 81, 100]
+let levels = [100, 81, 49]
 play.addEventListener('click', selectLev)
 replay.addEventListener('click', cancel)
 // selezione livello e generazione
@@ -22,12 +22,12 @@ function selectLev() {
     } else {
         alert('Seleziona un livello')
     }
-}
+};
 // reset
 function cancel () {
     campo.innerHTML = ''
     replay.classList.add('d-none')
-}
+};
 // contenuto generato
 function generazione (level) {
     let dim = 100 / Math.sqrt(level)
@@ -38,7 +38,26 @@ function generazione (level) {
         box.classList.add(`box-${i}`)
         box.style.border = '1px solid black'
         box.style.width = dim + '%'
+        box.addEventListener('click',changeColor)
         box.innerHTML = i;
         campo.append(box)
     }
 };
+// numeri perdenti
+let looserNumbers = []
+while (looserNumbers.length < 16) { 
+    let random = Math.floor(Math.random() * 100) + 1;
+    if (!(looserNumbers.includes(random))) {
+        looserNumbers.push(random);
+    }
+};
+console.log(looserNumbers)
+
+
+let content = document.querySelectorAll('.box')
+
+function changeColor() {
+    this.classList.add('bg-secondary')
+    this.classList.remove('bg-light')
+}
+
