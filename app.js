@@ -1,4 +1,3 @@
-// STRUTTURA
 // CREAZIONE STRUTTURA
 let side = '500px'
 let levelInp = document.querySelector('#level')
@@ -6,32 +5,41 @@ let campo = document.querySelector('.campo')
 campo.style.maxWidth = '500px'
 let play = document.querySelector('.play')
 let replay = document.querySelector('.replay')
-// levels
+// levels, play and restart
 let levels = [100, 81, 49]
 play.addEventListener('click', selectLev)
 replay.addEventListener('click', cancel)
-// selezione livello e generazione
+// selezione livello e generazione griglia + caselle bomba
+let cellNum = 0
+let looserNumbers = []
 function selectLev() {
     cancel();
     if (levelInp.value == 'firstLevel') {
+        cellNum = 100;
         generazione(levels[0]);
-        return 1
     } else if (levelInp.value == 'secondLevel') {
+        cellNum = 81;
         generazione(levels[1]);
-        return 2
     } else  if (levelInp.value == 'thirdLevel') {
+        cellNum = 49;
         generazione(levels[2]);
     } else {
         alert('Seleziona un livello')
-        return 3
     }
+    while (looserNumbers.length < 16) {
+        let random = Math.floor(Math.random() * cellNum) + 1;
+        if (!(looserNumbers.includes(random))) {
+            looserNumbers.push(random);
+        }
+    };
+    console.log(looserNumbers)
 };
 // reset
 function cancel () {
     campo.innerHTML = ''
     replay.classList.add('d-none')
 };
-// contenuto generato
+// box generati all'interno della griglia
 function generazione (level) {
     let dim = 100 / Math.sqrt(level)
     for (let i = 1; i <= level; i++) {
@@ -47,33 +55,35 @@ function generazione (level) {
         campo.append(box)
     }
 };
-let looserNumbers = []
-console.log(looserNumbers)
-// creazione numeri perdenti random
-while (looserNumbers.length < 16) { 
-    let random = Math.floor(Math.random() * 100) + 1;
-    if (!(looserNumbers.includes(random))) {
-        looserNumbers.push(random);
-    }
-};
-// effetto che ha il click sulla casella
-let bombCounter = 0
+
+// CAMBIO SFONDO CASELLA + DECRETO VINCITORE E PERDENTE
 function changeColor() {
+    let bombCounter = 0
     for (let i = 0; i < looserNumbers.length; i++) {
         const element = looserNumbers[i];
         if ((this.innerHTML + '' == element + '')) {
-            bombCounter =+ 1;
+            bombCounter = bombCounter + 1;
             this.classList.add('bg-danger');
             this.classList.remove('bg-light');
         } else {
             this.classList.add('bg-secondary');
             this.classList.remove('bg-light');
-        }           
+        }
     }
-    if (bombCounter == 16) {
-        campo.innerHTML = 'Hai perso'  
+    // Decreto looser/winner
+    let successCell = document.querySelectorAll('.bg-secondary')
+    let looserCell = document.querySelectorAll('.bg-danger')
+    let totalCell = document.querySelectorAll('.box')
+
+    if (looserCell.length == 3) {
+        campo.innerHTML = 'Hai perso'
+        // schermata looser
+    } else if (successCell.length == (totalCell.length - 3)) {
+        campo.innerHTML = 'Hai vinto'
+        // schermata winner
     }
 };
+
 
 
 
