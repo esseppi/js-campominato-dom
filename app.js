@@ -13,13 +13,13 @@ replay.addEventListener('click', cancel)
 function selectLevel() {
     cancel()
     if (levelInp.value == 'firstLevel') {
-        generazione(levels[0]);
+        generazione(levels[0], looserNumbers);
         generatingBombs(levels[0])
     } else if (levelInp.value == 'secondLevel') {
         generatingBombs(levels[0])
-        generazione(levels[1]);
+        generazione(levels[1], looserNumbers);
     } else  if (levelInp.value == 'thirdLevel') {
-        generazione(levels[2]);
+        generazione(levels[2], looserNumbers);
         generatingBombs(levels[0])
     } else {
         alert('Seleziona un livello')
@@ -42,7 +42,7 @@ function cancel () {
     replay.classList.add('d-none')
 };
 // box generati all'interno della griglia
-function generazione (level) {
+function generazione (level, looserNumbers) {
     let dim = 100 / Math.sqrt(level)
     for (let i = 1; i <= level; i++) {
         let box = document.createElement('div')
@@ -52,7 +52,7 @@ function generazione (level) {
         box.style.border = '1px solid black'
         box.style.width = dim + '%'
         // canalizzatore del click specifico 'box' collegato alla funzione changecolor
-        box.addEventListener('click', changeColor)
+        box.addEventListener('click', changeColor,looserNumbers)
         box.innerHTML = i;
         campo.append(box)
     }
@@ -80,7 +80,7 @@ function changeColor() {
         for (let i = 0; i < box.length; i++) {
             box[i].removeEventListener('click', changeColor)
         }
-        
+        output.innerHTML = `Il tuo punteggio è di ${successCell}`
     }
     // Decreto looser/winner
 
