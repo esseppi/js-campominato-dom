@@ -1,6 +1,6 @@
 // CREAZIONE STRUTTURA
-let side = '500px'
 let levelInp = document.querySelector('#level')
+let output = document.querySelector('.output')
 let campo = document.querySelector('.campo')
 campo.style.maxWidth = '500px'
 let play = document.querySelector('.play')
@@ -14,6 +14,7 @@ let cellNum = 0
 let looserNumbers = []
 function selectLev() {
     cancel();
+    
     if (levelInp.value == 'firstLevel') {
         cellNum = 100;
         generazione(levels[0]);
@@ -26,18 +27,20 @@ function selectLev() {
     } else {
         alert('Seleziona un livello')
     }
-    while (looserNumbers.length < 16) {
-        let random = Math.floor(Math.random() * cellNum) + 1;
-        if (!(looserNumbers.includes(random))) {
-            looserNumbers.push(random);
-        }
-    };
-    console.log(looserNumbers)
+    function generateBomb() {
+        while (looserNumbers.length < 16) {
+            let random = Math.floor(Math.random() * cellNum) + 1;
+            if (!(looserNumbers.includes(random))) {
+                looserNumbers.push(random);
+            }
+        };
+    }
 };
 // reset
 function cancel () {
     campo.innerHTML = ''
     replay.classList.add('d-none')
+    output.innerHTML = ''
 };
 // box generati all'interno della griglia
 function generazione (level) {
@@ -50,7 +53,7 @@ function generazione (level) {
         box.style.border = '1px solid black'
         box.style.width = dim + '%'
         // canalizzatore del click specifico 'box' collegato alla funzione changecolor
-        box.addEventListener('click',changeColor)
+        box.addEventListener('click', changeColor)
         box.innerHTML = i;
         campo.append(box)
     }
@@ -58,6 +61,9 @@ function generazione (level) {
 
 // CAMBIO SFONDO CASELLA + DECRETO VINCITORE E PERDENTE
 function changeColor() {
+    let successCell = document.querySelectorAll('.bg-secondary')
+    let box = document.querySelectorAll('.box')
+    let totalCell = document.querySelectorAll('.box')
     let bombCounter = 0
     for (let i = 0; i < looserNumbers.length; i++) {
         const element = looserNumbers[i];
@@ -69,19 +75,30 @@ function changeColor() {
             this.classList.add('bg-secondary');
             this.classList.remove('bg-light');
         }
+        if (bombCounter == 1 || (successCell.length == (totalCell.length - 3))) {
+            // rendo le caselle bomba rosse
+            for (let j = 0; j < box.length; j++) {
+                if (parseInt(box[j].innerHTML) == looserNumbers[i]) {
+                    console.log(box[j])
+                    box[j].classList.add('bg-danger')
+                    box[j].classList.remove('bg-light')
+                }
+            }
+            for (let i = 0; i < box.length; i++) {
+            // blocco schermata
+                box[i].removeEventListener('click', changeColor)
+            }
+            // schermata winner
+        }
+        if (successCell.length == (totalCell.length - 3)) {
+            output.innerHTML = `Hai vinto e hai totalizzato ${successCell.length} punti!`;
+        } else if (bombCounter == 1) {
+            output.innerHTML = `Hai perso e hai totalizzato ${successCell.length} punti!`;
+        }
+       
     }
     // Decreto looser/winner
-    let successCell = document.querySelectorAll('.bg-secondary')
-    let looserCell = document.querySelectorAll('.bg-danger')
-    let totalCell = document.querySelectorAll('.box')
 
-    if (looserCell.length == 3) {
-        campo.innerHTML = 'Hai perso'
-        // schermata looser
-    } else if (successCell.length == (totalCell.length - 3)) {
-        campo.innerHTML = 'Hai vinto'
-        // schermata winner
-    }
 };
 
 
