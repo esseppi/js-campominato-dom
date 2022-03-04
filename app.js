@@ -1,46 +1,46 @@
 // CREAZIONE STRUTTURA
+let side = '500px'
 let levelInp = document.querySelector('#level')
-let output = document.querySelector('.output')
 let campo = document.querySelector('.campo')
 campo.style.maxWidth = '500px'
 let play = document.querySelector('.play')
 let replay = document.querySelector('.replay')
 // levels, play and restart
 let levels = [100, 81, 49]
-play.addEventListener('click', selectLev)
+play.addEventListener('click', selectLevel)
 replay.addEventListener('click', cancel)
 // selezione livello e generazione griglia + caselle bomba
-let cellNum = 0
-let looserNumbers = []
-function selectLev() {
-    cancel();
-    
+function selectLevel() {
+    cancel()
     if (levelInp.value == 'firstLevel') {
-        cellNum = 100;
         generazione(levels[0]);
+        generatingBombs(levels[0])
     } else if (levelInp.value == 'secondLevel') {
-        cellNum = 81;
+        generatingBombs(levels[0])
         generazione(levels[1]);
     } else  if (levelInp.value == 'thirdLevel') {
-        cellNum = 49;
         generazione(levels[2]);
+        generatingBombs(levels[0])
     } else {
         alert('Seleziona un livello')
-    }
-    function generateBomb() {
-        while (looserNumbers.length < 16) {
-            let random = Math.floor(Math.random() * cellNum) + 1;
-            if (!(looserNumbers.includes(random))) {
-                looserNumbers.push(random);
-            }
-        };
-    }
+    }   
+};
+
+// generazione bombe
+function generatingBombs(level) {
+    let looserNumbers = []
+    while (looserNumbers.length < 16) {
+        let random = Math.floor(Math.random() * level) + 1;
+        if (!(looserNumbers.includes(random))) {
+            looserNumbers.push(random);
+        }
+    };
+    console.log(looserNumbers) 
 };
 // reset
 function cancel () {
     campo.innerHTML = ''
     replay.classList.add('d-none')
-    output.innerHTML = ''
 };
 // box generati all'interno della griglia
 function generazione (level) {
@@ -62,7 +62,7 @@ function generazione (level) {
 // CAMBIO SFONDO CASELLA + DECRETO VINCITORE E PERDENTE
 function changeColor() {
     let successCell = document.querySelectorAll('.bg-secondary')
-    let box = document.querySelectorAll('.box')
+    let looserCell = document.querySelectorAll('.bg-danger')
     let totalCell = document.querySelectorAll('.box')
     let bombCounter = 0
     for (let i = 0; i < looserNumbers.length; i++) {
@@ -75,27 +75,13 @@ function changeColor() {
             this.classList.add('bg-secondary');
             this.classList.remove('bg-light');
         }
-        if (bombCounter == 1 || (successCell.length == (totalCell.length - 3))) {
-            // rendo le caselle bomba rosse
-            for (let j = 0; j < box.length; j++) {
-                if (parseInt(box[j].innerHTML) == looserNumbers[i]) {
-                    console.log(box[j])
-                    box[j].classList.add('bg-danger')
-                    box[j].classList.remove('bg-light')
-                }
-            }
-            for (let i = 0; i < box.length; i++) {
-            // blocco schermata
-                box[i].removeEventListener('click', changeColor)
-            }
+        if (looserCell.length == 3) {
+            campo.innerHTML = 'Hai perso'
+            // schermata looser
+        } else if (successCell.length == (totalCell.length - 3)) {
+            campo.innerHTML = 'Hai vinto'
             // schermata winner
         }
-        if (successCell.length == (totalCell.length - 3)) {
-            output.innerHTML = `Hai vinto e hai totalizzato ${successCell.length} punti!`;
-        } else if (bombCounter == 1) {
-            output.innerHTML = `Hai perso e hai totalizzato ${successCell.length} punti!`;
-        }
-       
     }
     // Decreto looser/winner
 
