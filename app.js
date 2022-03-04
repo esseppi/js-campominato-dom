@@ -1,5 +1,6 @@
 // CREAZIONE STRUTTURA
 let side = '500px'
+let output = document.querySelector('.output')
 let levelInp = document.querySelector('#level')
 let campo = document.querySelector('.campo')
 campo.style.maxWidth = '500px'
@@ -80,7 +81,7 @@ function changeColor() {
         for (let i = 0; i < box.length; i++) {
             box[i].removeEventListener('click', changeColor)
         }
-        output.innerHTML = `Il tuo punteggio è di ${successCell}`
+        output.innerHTML = `Il tuo punteggio è di ${successCell.length}`
     }
     // Decreto looser/winner
 
