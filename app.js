@@ -9,7 +9,6 @@ let replay = document.querySelector('.replay')
 // levels, play and restart
 let levels = [100, 81, 49]
 play.addEventListener('click', selectLevel)
-replay.addEventListener('click', cancel)
 // selezione livello e generazione griglia + caselle bomba
 function selectLevel() {
     cancel()
@@ -26,8 +25,8 @@ function selectLevel() {
         alert('Seleziona un livello')
     }   
 };
-let looserNumbers = []
 // generazione bombe
+let looserNumbers = []
 function generatingBombs(level) {
     while (looserNumbers.length < 16) {
         let random = Math.floor(Math.random() * level) + 1;
@@ -40,6 +39,7 @@ function generatingBombs(level) {
 // reset
 function cancel () {
     campo.innerHTML = ''
+    output.innerHTML = ''    
     replay.classList.add('d-none')
 };
 // box generati all'interno della griglia
@@ -53,7 +53,7 @@ function generazione (level, looserNumbers) {
         box.style.border = '1px solid black'
         box.style.width = dim + '%'
         // canalizzatore del click specifico 'box' collegato alla funzione changecolor
-        box.addEventListener('click', changeColor,looserNumbers)
+        box.addEventListener('click', changeColor, looserNumbers)
         box.innerHTML = i;
         campo.append(box)
     }
@@ -74,7 +74,6 @@ function changeColor() {
             this.classList.add('bg-secondary');
             this.classList.remove('bg-light');
         }
-
     }
     // gameover
     if ((bombCounter == 1) || (successCell.length == (box.length - 3))) {
@@ -83,8 +82,6 @@ function changeColor() {
         }
         output.innerHTML = `Il tuo punteggio è di ${successCell.length}`
     }
-    // Decreto looser/winner
-
 };
 
 
