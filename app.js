@@ -25,10 +25,9 @@ function selectLevel() {
         alert('Seleziona un livello')
     }   
 };
-
+let looserNumbers = []
 // generazione bombe
 function generatingBombs(level) {
-    let looserNumbers = []
     while (looserNumbers.length < 16) {
         let random = Math.floor(Math.random() * level) + 1;
         if (!(looserNumbers.includes(random))) {
@@ -62,8 +61,7 @@ function generazione (level) {
 // CAMBIO SFONDO CASELLA + DECRETO VINCITORE E PERDENTE
 function changeColor() {
     let successCell = document.querySelectorAll('.bg-secondary')
-    let looserCell = document.querySelectorAll('.bg-danger')
-    let totalCell = document.querySelectorAll('.box')
+    let box = document.querySelectorAll('.box')
     let bombCounter = 0
     for (let i = 0; i < looserNumbers.length; i++) {
         const element = looserNumbers[i];
@@ -75,13 +73,14 @@ function changeColor() {
             this.classList.add('bg-secondary');
             this.classList.remove('bg-light');
         }
-        if (looserCell.length == 3) {
-            campo.innerHTML = 'Hai perso'
-            // schermata looser
-        } else if (successCell.length == (totalCell.length - 3)) {
-            campo.innerHTML = 'Hai vinto'
-            // schermata winner
+
+    }
+    // gameover
+    if ((bombCounter == 1) || (successCell.length == (box.length - 3))) {
+        for (let i = 0; i < box.length; i++) {
+            box[i].removeEventListener('click', changeColor)
         }
+        
     }
     // Decreto looser/winner
 
